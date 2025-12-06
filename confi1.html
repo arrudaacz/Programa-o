@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configurações - SIPAT-LJ</title>
+<style>
+  body { margin:0; font-family: "Inter", sans-serif; background: #ffffff; color: #003366; }
+  .card { max-width: 1200px; margin: 40px auto; background: #f5f9ff; border: 2px solid #007bff; border-radius: 18px; padding: 40px 50px; display: flex; justify-content: space-between; position: relative; box-shadow: 0 0 15px rgba(0,123,255,0.25); }
+  .perfil-area { position: absolute; right: 40px; top: 35px; text-align: center; }
+  .foto-perfil { width: 90px; height: 90px; border-radius: 20px; border: 2px solid #007bff; object-fit: cover; }
+  .perfil-nome { font-size: 1.4rem; font-weight: 700; margin-top: 8px; color: #003366; }
+  .perfil-lang { font-size: 0.9rem; color: #0056b3; }
+  .left-side { flex: 1; max-width: 420px; }
+  .titulo { font-size: 2rem; font-weight: 700; color: #003366; }
+  .subtitulo { color: #007bff; font-size: 1rem; margin-top: 2px; margin-bottom: 18px; font-weight: 600; }
+  .label { font-weight: 700; margin-top: 22px; color: #003366; }
+  .valor { color: #0056b3; font-size: 1.05rem; margin-top: 4px; }
+  .botoes { margin-top: 35px; display: flex; gap: 15px; }
+  .btn { padding: 12px 26px; background: #007bff; color: #ffffff; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; transition: 0.25s ease; text-decoration: none; display: inline-block; }
+  .btn:hover { background: #0056b3; }
+  .illustration-container { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .illustration { width: 420px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="perfil-area">
+    <img class="foto-perfil" id="fotoConfig" src="./perfil_padrao.png" alt="perfil">
+    <div class="perfil-nome" id="nomeConfig">Usuário</div>
+    <div class="perfil-lang">Português</div>
+  </div>
+
+  <div class="left-side">
+    <div class="titulo">Configurações</div>
+    <div class="subtitulo">Dados da Conta</div>
+
+    <div class="label">ANO DE ENSINO:</div>
+    <div class="valor" id="anoConfig">•••••</div>
+
+    <div class="label">EMAIL DA CONTA:</div>
+    <div class="valor" id="emailConfig">•••••</div>
+
+    <div class="botoes">
+      <a class="btn" href="confi2.html">Editar perfil</a>
+      <a class="btn" href="tela.inicial.html" id="btnVoltar">Voltar</a>
+    </div>
+  </div>
+
+  <div class="illustration-container">
+    <img class="illustration" src="https://i.ibb.co/4RND7jZb/1763230401337.png" alt="ilustração">
+  </div>
+
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdE7bFCtd2WBF4DdnJUhX4TzXFKmI0_5Q",
+  authDomain: "site-c2f38.firebaseapp.com",
+  projectId: "site-c2f38",
+  storageBucket: "site-c2f38.appspot.com",
+  messagingSenderId: "695755292890",
+  appId: "1:695755292890:web:17608b38a17fa56af565e3",
+  measurementId: "G-198K8EM0YW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    alert("Você precisa estar logado!");
+    window.location.href = "login.html";
+    return;
+  }
+
+  let perfil = JSON.parse(localStorage.getItem("perfilQuizLab")) || {};
+
+  perfil.email = user.email;
+  perfil.uid = user.uid;
+
+  if (!perfil.nome) perfil.nome = user.displayName || user.email.split("@")[0];
+  if (!perfil.foto) perfil.foto = user.photoURL || "https://i.ibb.co/tPngypcq/9e837528f01cf3f42119c5aeeed1b336.jpg";
+  if (!perfil.anoEnsino) perfil.anoEnsino = "Não informado";
+
+  localStorage.setItem("perfilQuizLab", JSON.stringify(perfil));
+
+  preencher(perfil);
+});
+
+function preencher(perfil) {
+  document.getElementById("fotoConfig").src = perfil.foto;
+  document.getElementById("nomeConfig").textContent = perfil.nome;
+  document.getElementById("emailConfig").textContent = perfil.email;
+  document.getElementById("anoConfig").textContent = perfil.anoEnsino;
+}
+</script>
+
+</body>
+</html>
