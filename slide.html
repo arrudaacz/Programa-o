@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slides | SIPAT-LJ</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #ffffff;
+    color: #003366;
+  }
+
+  /* BOTÃO VOLTAR */
+  .btn-voltar {
+    margin: 30px 0 0 30px;
+    padding: 10px 22px;
+    background: #007bff;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-voltar:hover {
+    background: #0056b3;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 20px auto 40px auto;
+    background: #f5f9ff;
+    border: 2px solid #007bff;
+    border-radius: 18px;
+    padding: 40px 50px;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.25);
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    color: #003366;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .sub {
+    color: #007bff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
+  /* matérias */
+  .materias {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .btn-materia {
+    padding: 10px 22px;
+    background: #ffffff;
+    border: 2px solid #007bff;
+    color: #003366;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .btn-materia:hover,
+  .btn-materia.ativa {
+    background: #007bff;
+    color: #ffffff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    background: #007bff;
+    color: white;
+    padding: 14px;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  td {
+    padding: 14px;
+    border-bottom: 1px solid #c6d6ff;
+    font-size: 1rem;
+  }
+
+  tr:hover {
+    background: #eaf2ff;
+  }
+
+  .nome-slide {
+    color: #007bff;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.25s ease;
+  }
+
+  .nome-slide:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+</style>
+</head>
+
+<body>
+
+  <a class="btn-voltar" href="tela.inicial.html">Voltar</a>
+
+  <div class="container">
+
+    <h1>Slides Disponíveis</h1>
+    <div class="sub">Selecione a matéria para visualizar</div>
+
+    <div class="materias">
+      <button class="btn-materia ativa" onclick="trocarMateria('port')">Português</button>
+      <button class="btn-materia" onclick="trocarMateria('mat')">Matemática</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tema</th>
+          <th>Arquivo</th>
+        </tr>
+      </thead>
+
+      <tbody id="lista-slides"></tbody>
+    </table>
+
+  </div>
+
+<script>
+  const slides = {
+    port: [
+      { titulo: "Figuras de Linguagem", link: "#" },
+      { titulo: "Período Composto", link: "#" },
+      { titulo: "Coesão e Coerência", link: "#" }
+    ],
+    mat: [
+      { titulo: "Funções Afim", link: "#" },
+      { titulo: "Progressões Aritméticas", link: "#" },
+      { titulo: "Geometria Espacial", link: "#" }
+    ]
+  };
+
+  const lista = document.getElementById("lista-slides");
+
+  function trocarMateria(materia) {
+    document.querySelectorAll(".btn-materia").forEach(btn => btn.classList.remove("ativa"));
+    event.target.classList.add("ativa");
+
+    lista.innerHTML = "";
+
+    slides[materia].forEach(s => {
+      lista.innerHTML += `
+        <tr>
+          <td>${s.titulo}</td>
+          <td><a class="nome-slide" href="${s.link}">Abrir Slide</a></td>
+        </tr>
+      `;
+    });
+  }
+
+  trocarMateria("port");
+</script>
+
+</body>
+</html>
