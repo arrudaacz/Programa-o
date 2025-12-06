@@ -165,18 +165,16 @@ window.criarConta = () => {
     alert("Preencha todos os campos!");
     return;
   }
-
-  // Criando usuário no Firebase Auth
+  
   createUserWithEmailAndPassword(auth, email, senha)
     .then((userCred) => {
       const user = userCred.user;
-
-      // Salvar dados no localStorage
+      
       const perfil = {
-        nome: email.split("@")[0],  // Nome automático
+        nome: email.split("@")[0],  
         email: email,
         anoEnsino: ano,
-        foto: "https://i.ibb.co/tPngypcq/9e837528f01cf3f42119c5aeeed1b336.jpg", // Foto padrão
+        foto: "https://i.ibb.co/tPngypcq/9e837528f01cf3f42119c5aeeed1b336.jpg", 
         uid: user.uid
       };
 
@@ -192,3 +190,4 @@ window.criarConta = () => {
 
 </body>
 </html>
+
