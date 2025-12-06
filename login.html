@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Quiz-Lab</title>
+
+<style>
+  body { 
+    background: #fff;
+    font-family: Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:40px;
+    min-height:100vh;
+  }
+  .login-container { max-width:380px; width:100%; display:flex; flex-direction:column; align-items:center; }
+  .logo { max-width:200px; margin-bottom:25px; }
+  .login-box { 
+    background:#f5f9ff;
+    padding:32px;
+    border-radius:14px;
+    border:2px solid #007bff;
+    width:100%;
+    box-shadow:0 0 15px rgba(0,123,255,0.25);
+  }
+  .title { text-align:center; font-size:28px; font-weight:bold; margin:0; color:#003366; }
+  .highlight { color:#007bff; }
+  .subtitle { text-align:center; font-size:15px; margin:5px 0 20px 0; color:#0056b3; }
+  input { width:100%; padding:12px; margin:8px 0; border-radius:6px; border:1px solid #007bff; font-size:15px; }
+  button { width:100%; background:#007bff; color:#fff; padding:12px; border:none; border-radius:6px; font-size:16px; cursor:pointer; margin-top:10px; }
+  button:hover { background:#0056b3; }
+  .extras { margin-top:15px; text-align:center; }
+  .extras a { color:#0056b3; text-decoration:none; font-size:15px; }
+  .extras a:hover { text-decoration:underline; }
+</style>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdE7bFCtd2WBF4DdnJUhX4TzXFKmI0_5Q",
+  authDomain: "site-c2f38.firebaseapp.com",
+  projectId: "site-c2f38",
+  storageBucket: "site-c2f38.appspot.com",
+  messagingSenderId: "695755292890",
+  appId: "1:695755292890:web:17608b38a17fa56af565e3",
+  measurementId: "G-198K8EM0YW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.login = (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  signInWithEmailAndPassword(auth, email, senha)
+    .then(userCredential => {
+      const user = userCredential.user;
+
+      let perfil = JSON.parse(localStorage.getItem("perfilQuizLab")) || {};
+
+      if (!perfil.uid || perfil.uid !== user.uid) {
+        perfil = {
+          nome: user.displayName || user.email.split("@")[0],
+          email: user.email,
+          foto: user.photoURL || "https://i.ibb.co/tPngypcq/9e837528f01cf3f42119c5aeeed1b336.jpg",
+          uid: user.uid
+        };
+        localStorage.setItem("perfilQuizLab", JSON.stringify(perfil));
+      }
+
+      window.location.href = "tela.inicial.html";
+    })
+    .catch(error => {
+      alert("Erro ao entrar: " + error.message);
+    });
+};
+</script>
+</head>
+
+<body>
+<div class="login-container">
+  <img src="https://i.ibb.co/fYBb1yCz/Marca-Ifap-Campus-Laranjal-do-Jari-Horizontal-Negativo-5.png" class="logo">
+
+  <div class="login-box">
+    <h1 class="title"><span class="highlight">Quiz</span>-Lab</h1>
+    <p class="subtitle">Laboratório De Desafios Mentais</p>
+
+    <form onsubmit="login(event)">
+      <input type="email" id="usuario" placeholder="E-mail" required>
+      <input type="password" id="senha" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <div class="extras">
+      <a href="cadrasto.html">Criar uma conta</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
