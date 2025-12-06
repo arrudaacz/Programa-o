@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Estudos - Quiz-Lab</title>
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --muted: #9aa4b2;
+    --primary: #6a8ff2;
+    --accent: #4ec5be;
+    --success: #22c55e;
+    --danger: #e63946;
+    --radius: 14px;
+    --pad: 18px;
+    --shadow: 0 8px 30px rgba(22,36,70,0.06);
+    --ease: cubic-bezier(.2,.9,.2,1);
+    --plan-blue: #6a8ff2;
+    --plan-green: #22c55e;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Inter",system-ui,sans-serif;background:var(--bg);padding:20px;}
+  h1,h2,h3,h4,h5,h6{margin:0;}
+  button{cursor:pointer;font-weight:700;border:none;border-radius:10px;transition:0.2s}
+  
+  .wrap{
+    max-width:1000px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr 300px;
+    gap:20px;
+  }
+
+  .header{
+    grid-column: 1 / -1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+  }
+
+  .header h1{font-size:22px;color:#003366;}
+  .btn-back{background:#f5f9ff;color:#007bff;padding:10px 14px;box-shadow:var(--shadow);}
+  .btn-back:hover{background:#007bff;color:#fff;}
+
+  .main{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:var(--pad);
+    box-shadow:var(--shadow);
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0; transform: translateY(10px);}
+    to{opacity:1; transform: translateY(0);}
+  }
+
+  .form-group{margin-bottom:12px; display:flex; flex-direction:column;}
+  .form-group label{font-size:14px; margin-bottom:6px; color:#003366;}
+  .form-group input, .form-group select, .form-group textarea{
+    padding:10px;
+    border-radius:10px;
+    border:1px solid rgba(0,123,255,0.2);
+    font-size:14px;
+    transition:0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none;
+    box-shadow:0 8px 18px rgba(0,123,255,0.06);
+    border-color:var(--primary);
+  }
+
+  .btn-add{background:var(--primary);color:#fff;padding:10px 14px;box-shadow:0 8px 20px rgba(0,123,255,0.12); margin-top:8px;}
+  .btn-add:hover{background:#0056b3;}
+
+  .calendar{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:var(--pad);
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  .calendar h3{text-align:center;margin-bottom:12px;}
+  .calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:4px;
+    margin-bottom:12px;
+  }
+  .calendar-weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    margin-bottom:4px;
+    text-align:center;
+    font-weight:700;
+    color:var(--primary);
+  }
+  .calendar-day{
+    background:#f5f9ff;
+    border-radius:8px;
+    padding:10px;
+    text-align:center;
+    cursor:default;
+    transition:0.2s;
+    position:relative;
+  }
+  .calendar-day.today{border:2px solid #007bff; font-weight:700;}
+  .calendar-day.has-plan{background:var(--plan-blue); color:#fff;}
+  .calendar-day.completed{background:var(--plan-green); color:#fff;}
+
+  .plans{
+    background:#f5f9ff;
+    border-radius:10px;
+    padding:12px;
+    overflow-y:auto;
+    max-height:300px; /* limita altura e ativa scroll se necessário */
+  }
+  .plan-item{
+    background:#fff;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    box-shadow:0 6px 18px rgba(16,32,39,0.03);
+    transition: transform 0.2s, background 0.3s;
+  }
+  .plan-item:hover{transform:translateY(-2px);}
+  .plan-item.completed{background:#d4edda; text-decoration: line-through; color:var(--muted);}
+  .plan-item small{color:var(--muted); font-size:13px;}
+  .plan-item .remove{color:var(--danger); cursor:pointer; font-weight:700; margin-left:8px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+    <h1>Plano de Estudos</h1>
+    <button class="btn-back" onclick="window.location.href='tela.inicial.html'">Voltar</button>
+  </div>
+
+  <main class="main">
+    <div class="form-group">
+      <label>Matéria *</label>
+      <input type="text" id="inputMateria" placeholder="Ex: Matemática">
+    </div>
+
+    <div class="form-group">
+      <label>Nome do Conteúdo *</label>
+      <input type="text" id="inputConteudo" placeholder="Ex: Frações">
+    </div>
+
+    <div class="form-group">
+      <label>Data *</label>
+      <input type="date" id="inputData">
+    </div>
+
+    <div class="form-group">
+      <label>Horário *</label>
+      <input type="time" id="inputHora">
+    </div>
+
+    <div class="form-group">
+      <label>Prioridade</label>
+      <select id="inputPrioridade">
+        <option>Normal</option>
+        <option>Alta</option>
+        <option>Urgente</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Observações</label>
+      <textarea id="inputObs" placeholder="Detalhes do plano..."></textarea>
+    </div>
+
+    <button class="btn-add" id="btnAddPlan">Adicionar Plano</button>
+  </main>
+
+  <aside class="calendar">
+    <h3>Calendário</h3>
+    <div class="calendar-weekdays">
+      <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <!-- Planos agora ficam abaixo do calendário -->
+    <div class="plans" id="plansList">
+      <h3>Planos de Estudo Cadastrados</h3>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  const plansList = document.getElementById('plansList');
+  const btnAddPlan = document.getElementById('btnAddPlan');
+  const calendarGrid = document.getElementById('calendarGrid');
+
+  function loadPlans(){
+    const saved = JSON.parse(localStorage.getItem('plans')||'[]');
+    plansList.innerHTML = '<h3>Planos de Estudo Cadastrados</h3>';
+    saved.forEach((plan,index)=>{
+      const div = document.createElement('div');
+      div.className = 'plan-item'+(plan.completed?' completed':'');
+      div.innerHTML = `
+        <div>
+          <input type="checkbox" class="checkbox" ${plan.completed?'checked':''} onclick="toggleComplete(${index},this)">
+          <strong>${plan.materia}</strong> - ${plan.conteudo} <small>${plan.data} ${plan.hora} • ${plan.prioridade}</small><br>
+          <small>${plan.obs}</small>
+        </div>
+        <div class="remove" onclick="removePlan(${index})">X</div>
+      `;
+      plansList.appendChild(div);
+    });
+    renderCalendar();
+  }
+
+  function toggleComplete(index,checkbox){
+    const saved = JSON.parse(localStorage.getItem('plans')||'[]');
+    saved[index].completed = checkbox.checked;
+    localStorage.setItem('plans', JSON.stringify(saved));
+    loadPlans();
+  }
+
+  function removePlan(index){
+    const saved = JSON.parse(localStorage.getItem('plans')||'[]');
+    saved.splice(index,1);
+    localStorage.setItem('plans', JSON.stringify(saved));
+    loadPlans();
+  }
+
+  btnAddPlan.addEventListener('click', ()=>{
+    const materia = document.getElementById('inputMateria').value.trim();
+    const conteudo = document.getElementById('inputConteudo').value.trim();
+    const data = document.getElementById('inputData').value;
+    const hora = document.getElementById('inputHora').value;
+    const prioridade = document.getElementById('inputPrioridade').value;
+    const obs = document.getElementById('inputObs').value.trim();
+
+    if(!materia || !data || !hora || !conteudo){
+      alert('Preencha Matéria, Nome do Conteúdo, Data e Horário.');
+      return;
+    }
+
+    const saved = JSON.parse(localStorage.getItem('plans')||'[]');
+    saved.push({materia,conteudo,data,hora,prioridade,obs,completed:false});
+    localStorage.setItem('plans', JSON.stringify(saved));
+
+    document.getElementById('inputMateria').value='';
+    document.getElementById('inputConteudo').value='';
+    document.getElementById('inputData').value='';
+    document.getElementById('inputHora').value='';
+    document.getElementById('inputObs').value='';
+    loadPlans();
+  });
+
+  function renderCalendar(){
+    const saved = JSON.parse(localStorage.getItem('plans')||'[]');
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    calendarGrid.innerHTML='';
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    for(let i=0;i<firstDay;i++){
+      const empty = document.createElement('div');
+      calendarGrid.appendChild(empty);
+    }
+
+    for(let d=1; d<=daysInMonth; d++){
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'calendar-day';
+      if(d===today.getDate()) dayDiv.classList.add('today');
+
+      const hasPlan = saved.some(p=>p.data===dateStr);
+      const completedPlan = saved.some(p=>p.data===dateStr && p.completed);
+
+      if(completedPlan) dayDiv.classList.add('completed');
+      else if(hasPlan) dayDiv.classList.add('has-plan');
+
+      dayDiv.textContent=d;
+      calendarGrid.appendChild(dayDiv);
+    }
+  }
+
+  loadPlans();
+</script>
+
+</bod
