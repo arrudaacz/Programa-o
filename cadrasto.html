@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Criar Conta - Quiz-Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body { 
+    background:#fff;
+    font-family: "Inter", sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:40px;
+    min-height:100vh;
+  }
+
+  .container { 
+    max-width:380px; 
+    width:100%; 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+  }
+
+  .logo { 
+    max-width:200px; 
+    margin-bottom:25px; 
+  }
+
+  .box {
+    background:#f5f9ff;
+    padding:32px;
+    border-radius:14px;
+    border:2px solid #007bff;
+    width:100%;
+    box-shadow:0 0 15px rgba(0,123,255,0.25);
+  }
+
+  .title {
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    margin:0;
+    color:#003366;
+  }
+
+  .highlight { color:#007bff; }
+
+  .subtitle {
+    text-align:center;
+    font-size:15px;
+    margin:5px 0 20px 0;
+    color:#0056b3;
+  }
+
+  .label {
+    font-size:15px;
+    margin-top:15px;
+    font-weight:600;
+    color:#003366;
+  }
+
+  input, select {
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:6px;
+    border:1px solid #007bff;
+    background:white;
+    font-size:15px;
+  }
+
+  button {
+    width:100%;
+    background:#007bff;
+    color:white;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:18px;
+  }
+
+  button:hover { background:#0056b3; }
+
+  .extras {
+    margin-top:15px;
+    text-align:center;
+  }
+
+  .extras a {
+    color:#0056b3;
+    text-decoration:none;
+    font-size:15px;
+  }
+
+  .extras a:hover { text-decoration:underline; }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+  <img src="https://i.ibb.co/fYBb1yCz/Marca-Ifap-Campus-Laranjal-do-Jari-Horizontal-Negativo-5.png" 
+       alt="Instituto Federal" class="logo">
+
+  <div class="box">
+    <h1 class="title"><span class="highlight">Criar</span> Conta</h1>
+    <p class="subtitle">Seu acesso ao Quiz-Lab começa aqui!</p>
+
+    <label class="label">E-mail</label>
+    <input id="email" type="email" placeholder="Digite seu e-mail">
+
+    <label class="label">Senha</label>
+    <input id="senha" type="password" placeholder="Crie sua senha">
+
+    <label class="label">Ano de Ensino</label>
+    <select id="anoEnsino">
+      <option value="">Selecione seu ano</option>
+      <option value="1º Ano">1º Ano</option>
+      <option value="2º Ano">2º Ano</option>
+      <option value="3º Ano">3º Ano</option>
+      <option value="Técnico">Técnico</option>
+    </select>
+
+    <button onclick="criarConta()">Criar Conta</button>
+
+    <div class="extras">
+      <a href="login.html">Já tenho uma conta</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdE7bFCtd2WBF4DdnJUhX4TzXFKmI0_5Q",
+  authDomain: "site-c2f38.firebaseapp.com",
+  projectId: "site-c2f38",
+  storageBucket: "site-c2f38.firebasestorage.app",
+  messagingSenderId: "695755292890",
+  appId: "1:695755292890:web:17608b38a17fa56af565e3",
+  measurementId: "G-198K8EM0YW"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.criarConta = () => {
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+  const ano = document.getElementById("anoEnsino").value;
+
+  if(!email || !senha || !ano){
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  // Criando usuário no Firebase Auth
+  createUserWithEmailAndPassword(auth, email, senha)
+    .then((userCred) => {
+      const user = userCred.user;
+
+      // Salvar dados no localStorage
+      const perfil = {
+        nome: email.split("@")[0],  // Nome automático
+        email: email,
+        anoEnsino: ano,
+        foto: "https://i.ibb.co/tPngypcq/9e837528f01cf3f42119c5aeeed1b336.jpg", // Foto padrão
+        uid: user.uid
+      };
+
+      localStorage.setItem("perfilQuizLab", JSON.stringify(perfil));
+
+      window.location.href = "criarperfil.html";
+    })
+    .catch((error) => {
+      alert("Erro ao criar conta: " + error.message);
+    });
+};
+</script>
+
+</body>
+</html>
