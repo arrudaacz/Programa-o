@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar Perfil - QuizLab</title>
+
+<style>
+  body {
+    font-family: "Inter", sans-serif;
+    background: #eef2f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .card {
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 410px;
+  }
+
+  h2 {
+    color: #003366;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-top: 18px;
+    font-weight: 600;
+    color: #003366;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccd3dd;
+    background: #fafafa;
+  }
+
+  /* Avatares menores e organizados */
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .icon-item {
+    text-align: center;
+    padding: 8px;
+    border-radius: 10px;
+    background: #f4f6fa;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: .25s;
+  }
+
+  .icon-item:hover {
+    transform: scale(1.05);
+    background: #eef3ff;
+  }
+
+  .icon-item img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.07);
+  }
+
+  .icon-item span {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #003366;
+  }
+
+  .selected {
+    border-color: #007bff !important;
+    background: #e8f1ff !important;
+    box-shadow: 0 0 12px rgba(0,0,0,0.12);
+  }
+
+  .btn {
+    margin-top: 28px;
+    width: 100%;
+    padding: 14px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+  }
+
+  .btn:hover {
+    background: #005ec4;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Criar Perfil</h2>
+
+  <label for="nome">Nome:</label>
+  <input type="text" id="nome" placeholder="Seu nome">
+
+  <label for="ano">Ano de Ensino:</label>
+  <input type="text" id="ano" placeholder="Ex: 3º Ano">
+
+  <label>Escolha seu avatar:</label>
+  
+  <div class="avatar-grid" id="avatarGrid">
+      <div class="icon-item"><img src="https://i.ibb.co/Ldtcdtsq/e931d9116ff50191b17d4bc22eebaffc.jpg"><span>Bryan</span></div>
+      <div class="icon-item"><img src="https://i.ibb.co/5xTq632v/4b09fb638a6753888eaaae2a299324b2.jpg"><span>Gustavo</span></div>
+      <div class="icon-item"><img src="https://i.ibb.co/99BMDHng/5c39f233c7fec9c7bc0b3861119659f0.jpg"><span>Eduarda</span></div>
+  </div>
+
+  <button class="btn" id="btnSalvar">Salvar Perfil</button>
+</div>
+
+<script>
+  const btnSalvar = document.getElementById('btnSalvar');
+  const avatarItems = document.querySelectorAll('.icon-item');
+  let avatarSelecionado = null;
+
+  const email = localStorage.getItem("emailQuizLab") || "erro@sememail.com";
+
+  avatarItems.forEach(item => {
+    item.addEventListener('click', () => {
+      avatarItems.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      avatarSelecionado = item.querySelector('img').src;
+    });
+  });
+
+  btnSalvar.addEventListener('click', () => {
+    const nome = document.getElementById('nome').value.trim();
+    const anoEnsino = document.getElementById('ano').value.trim();
+
+    if (!nome || !anoEnsino) {
+      alert("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
+    const foto = avatarSelecionado || "./perfil_padrao.png";
+
+    const perfil = { nome, email, anoEnsino, foto };
+    localStorage.setItem('perfilQuizLab', JSON.stringify(perfil));
+
+    alert("Perfil salvo com sucesso!");
+
+    window.location.href = "tela.inicial.html";
+  });
+</script>
+
+</body>
+</html>
