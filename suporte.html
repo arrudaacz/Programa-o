@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Suporte - Quiz-Lab</title>
+<style>
+:root{
+  --bg: #f6f8fb;
+  --card: #f5f9ff;
+  --muted: #9aa4b2;
+  --primary: #6a8ff2;
+  --brand-blue: #007bff;
+  --brand-blue-dark: #003366;
+  --accent: #4ec5be;
+  --success: #22c55e;
+  --danger: #e63946;
+  --glass: rgba(255,255,255,0.9);
+  --radius: 14px;
+  --shadow: 0 8px 30px rgba(22,36,70,0.06);
+  --pad: 18px;
+  --max-width: 980px;
+  --ease: cubic-bezier(.2,.9,.2,1);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,var(--bg),#ffffff 60%);
+  color:var(--brand-blue-dark);
+  display:flex;
+  justify-content:center;
+  padding:28px 16px;
+}
+
+.wrap{
+  width:100%;
+  max-width:var(--max-width);
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:20px;
+  align-items:start;
+}
+
+.header{
+  grid-column: 1 / -1;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:6px;
+}
+.hdr-left{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.logo{
+  width:52px;height:52px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--primary));
+  color:white; font-weight:700; display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);
+  font-size:18px;
+}
+.hdr-text h1{margin:0;font-size:18px}
+.hdr-text p{margin:0;color:var(--muted);font-size:13px}
+
+.main{
+  background:var(--card);
+  border-radius:16px;
+  padding:var(--pad);
+  box-shadow:var(--shadow);
+  min-height:420px;
+  overflow:hidden;
+  position:relative;
+}
+
+.fade-in { animation: floatIn .42s var(--ease) both; }
+@keyframes floatIn {
+  from { transform: translateY(8px); opacity:0 }
+  to { transform: translateY(0); opacity:1 }
+}
+
+.main-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.main-top .title{ font-weight:700; color:var(--brand-blue-dark); }
+.main-top .subtitle{ color:var(--muted); font-size:13px }
+
+.panels{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.ticket {
+  background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(245,249,255,0.6));
+  border-radius:12px;
+  padding:14px;
+  border:1px solid rgba(0,123,255,0.06);
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.ticket:hover{ transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,123,255,0.06) }
+
+.field { display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
+.field label{ font-size:13px; color:var(--brand-blue-dark); font-weight:600 }
+.field input, .field textarea, .field select{
+  padding:10px;border-radius:10px;border:2px solid rgba(0,123,255,0.12);
+  outline:none;font-size:14px;background:#fff;
+  transition:box-shadow .18s,var(--ease);
+}
+.field input:focus, .field textarea:focus, .field select:focus{
+  box-shadow:0 8px 18px rgba(0,123,255,0.06);
+  border-color:var(--brand-blue);
+}
+textarea{min-height:110px;resize:vertical}
+
+.row{display:flex;gap:10px}
+.row .col{flex:1}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  background:var(--brand-blue); color:#fff;padding:10px 14px;border-radius:10px;border:0;
+  font-weight:700;transition:transform .12s,var(--ease); box-shadow:0 8px 20px rgba(0,123,255,0.12);
+}
+.btn:active{ transform:translateY(2px) }
+.btn-ghost{ background:transparent;color:var(--brand-blue);border:2px solid rgba(0,123,255,0.08) }
+
+.tickets-list{ margin-top:10px; display:flex; flex-direction:column; gap:8px; max-height:200px; overflow:auto; padding-right:6px }
+
+.ticket-item{
+  background:#fff;border-radius:10px;padding:10px;border-left:5px solid var(--accent);
+  display:flex;justify-content:space-between;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(16,32,39,0.03);
+  transition:transform .12s;
+}
+.ticket-item:hover{ transform:translateY(-4px) }
+.ticket-item small{color:var(--muted)}
+
+.faq{
+  margin-top:6px;
+  display:flex;flex-direction:column;gap:8px;
+}
+.faq-item{
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid rgba(16,32,39,0.04);
+  background:linear-gradient(180deg,#ffffff,#fbfdff);
+}
+.faq-q{
+  padding:12px 14px; display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+}
+.faq-q h4{font-size:14px;margin:0}
+.faq-a{ max-height:0; overflow:hidden; transition:max-height .32s var(--ease), padding .32s var(--ease); padding:0 14px; color:var(--muted); font-size:14px }
+.faq-item.open .faq-a{ max-height:200px; padding:12px 14px }
+
+.side{
+  position:relative;
+  display:flex;flex-direction:column;gap:14px;
+}
+.card-side{
+  background:var(--card); padding:16px; border-radius:12px; box-shadow:var(--shadow);
+}
+.team{
+  display:grid;grid-template-columns:repeat(1,1fr);gap:10px;
+}
+.agent{
+  display:flex;gap:10px;align-items:center;padding:8px;border-radius:10px;background:#fff;box-shadow:0 6px 18px rgba(16,32,39,0.03)
+}
+.agent img{width:54px;height:54px;border-radius:12px;object-fit:cover}
+.agent .meta{display:flex;flex-direction:column}
+.agent .meta .name{font-weight:700}
+.agent .meta .role{font-size:13px;color:var(--muted)}
+
+.btn-voltar{
+  margin-top:12px;
+  background:#6c757d;
+  width:100%;
+  justify-content:center;
+}
+
+@media (max-width:980px){
+  .wrap{grid-template-columns:1fr; padding-bottom:60px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- header -->
+  <div class="header fade-in">
+    <div class="hdr-left">
+      <div class="logo">QL</div>
+      <div class="hdr-text">
+        <h1>Suporte • Quiz-Lab</h1>
+        <p>Precisa de ajuda? Abra um chamado ou fale com a equipe.</p>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" id="btnOpenTicket">Abrir chamado</button>
+    </div>
+  </div>
+
+  <main class="main fade-in" aria-labelledby="suporte">
+    <div class="main-top">
+      <div>
+        <div class="title">Central de Suporte</div>
+        <div class="subtitle">Escolha uma das opções abaixo — responderemos em até 24h.</div>
+      </div>
+      <div class="small">Canal ativo • <strong style="color:var(--brand-blue)">&middot; Online</strong></div>
+    </div>
+
+    <div class="panels">
+
+      <div class="ticket" id="ticketPanel" role="region" aria-label="Abrir chamado">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <strong>Abrir novo chamado</strong>
+          <small class="small">Campos obrigatórios marcados</small>
+        </div>
+
+        <div class="row">
+          <div class="col field">
+            <label>Nome *</label>
+            <input id="suNome" placeholder="Seu nome">
+          </div>
+          <div class="col field">
+            <label>E-mail *</label>
+            <input id="suEmail" placeholder="seu@exemplo.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Matéria</label>
+          <select id="suMateria">
+            <option>Geral / Conta</option>
+            <option>Slides</option>
+            <option>Quiz</option>
+            <option>Calendário</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Prioridade</label>
+          <select id="suPrior">
+            <option>Normal</option>
+            <option>Urgente</option>
+            <option>Baixa</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Mensagem *</label>
+          <textarea id="suMsg" placeholder="Descreva seu problema..."></textarea>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn" id="btnEnviar">Enviar chamado</button>
+          <button class="btn btn-ghost" id="btnLimpar">Limpar</button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="ticket" aria-label="FAQ">
+        <strong>Perguntas frequentes</strong>
+        <div class="faq" id="faq">
+          <div class="faq-item">
+            <div class="faq-q"><h4>Como redimensiono meu ícone de perfil?</h4><div>+</div></div>
+            <div class="faq-a">Abra Configurações → Editar Perfil → escolha a imagem e clique em salvar.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q"><h4>Os slides estão com cor errada — o que faço?</h4><div>+</div></div>
+            <div class="faq-a">Verifique nas configurações de tema ou envie um chamado com print.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q"><h4>Como adiciono eventos no calendário?</h4><div>+</div></div>
+            <div class="faq-a">No Plano de Estudo clique em 'Criar' (📆) e selecione datas no modal do calendário.</div>
+          </div>
+        </div>
+      </div>
+
+    </div> 
+  </main>
+
+  <aside class="side">
+    <div class="card-side fade-in">
+      <strong>Equipe de Suporte</strong>
+      <div class="team" style="margin-top:10px">
+        <div class="agent">
+          <img src="https://i.ibb.co/99BMDHng/5c39f233c7fec9c7bc0b3861119659f0.jpg" alt="Agente 1">
+          <div class="meta">
+            <div class="name">Isabelly A.</div>
+            <div class="role">Suporte • Horário: 09:00–17:00</div>
+          </div>
+        </div>
+        <div class="agent">
+          <img src="https://i.ibb.co/Y7ZLnXJG/11997a5f97d37e5af0436bdd61b37988.jpg" alt="Agente 2">
+          <div class="meta">
+            <div class="name">Merenica</div>
+            <div class="role">Suporte Técnico</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <strong>Seus chamados</strong>
+        <div class="tickets-list" id="listaTickets" aria-live="polite"></div>
+      </div>
+
+      <button class="btn btn-voltar" onclick="window.location.href='tela.inicial.html'">Voltar à tela inicial</button>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+
+  const perfil = JSON.parse(localStorage.getItem('perfilQuizLab') || '{}');
+  if(perfil.nome) document.getElementById('suNome').value = perfil.nome;
+  if(perfil.email) document.getElementById('suEmail').value = perfil.email;
+
+  document.querySelectorAll('.faq-q').forEach(q=>{
+    q.addEventListener('click', ()=> q.parentElement.classList.toggle('open'));
+  });
+
+  const listaTickets = document.getElementById('listaTickets');
+  const btnEnviar = document.getElementById('btnEnviar');
+  const btnLimpar = document.getElementById('btnLimpar');
+
+  function formatDate(d=new Date()){ return d.toLocaleString(); }
+
+  btnEnviar.addEventListener('click', ()=>{
+    const nome = document.getElementById('suNome').value.trim();
+    const email = document.getElementById('suEmail').value.trim();
+    const materia = document.getElementById('suMateria').value;
+    const prior = document.getElementById('suPrior').value;
+    const msg = document.getElementById('suMsg').value.trim();
+
+    if(!nome || !email || !msg){ alert('Preencha Nome, E-mail e Mensagem.'); return; }
+
+    localStorage.setItem('perfilQuizLab', JSON.stringify({nome,email}));
+
+    const id = 'TKT-'+Math.floor(Math.random()*90000+10000);
+    const item = document.createElement('div');
+    item.className = 'ticket-item';
+    item.innerHTML = `
+      <div>
+        <div style="font-weight:700">${nome} <small style="color:var(--muted)">• ${materia}</small></div>
+        <small>${msg.slice(0,60)}${msg.length>60 ? '…' : ''}</small>
+      </div>
+      <div style="text-align:right">
+        <small style="color:var(--muted)">${formatDate()}</small><br>
+        <small style="font-weight:700;color:${prior==='Urgente' ? 'var(--danger)' : 'var(--muted)'}">${prior}</small><br>
+        <small style="color:var(--muted)">${id}</small>
+      </div>
+    `;
+    listaTickets.prepend(item);
+
+    const saved = JSON.parse(localStorage.getItem('tickets')||'[]');
+    saved.unshift({id, nome, email, materia, prior, msg, date: new Date().toISOString()});
+    localStorage.setItem('tickets', JSON.stringify(saved));
+
+    btnEnviar.textContent = 'Enviado ✓';
+    btnEnviar.style.background = 'var(--success)';
+    setTimeout(()=> { btnEnviar.textContent = 'Enviar chamado'; btnEnviar.style.background = ''; },900);
+
+    document.getElementById('suMsg').value = '';
+  });
+
+  btnLimpar.addEventListener('click', ()=>{
+    document.getElementById('suMsg').value = '';
+  });
+
+  (function loadTickets(){
+    const saved = JSON.parse(localStorage.getItem('tickets')||'[]');
+    saved.forEach(t=>{
+      const item = document.createElement('div');
+      item.className = 'ticket-item';
+      item.innerHTML = `
+        <div>
+          <div style="font-weight:700">${t.nome} <small style="color:var(--muted)">• ${t.materia}</small></div>
+          <small>${t.msg.slice(0,60)}${t.msg.length>60 ? '…' : ''}</small>
+        </div>
+        <div style="text-align:right">
+          <small style="color:var(--muted)">${new Date(t.date).toLocaleString()}</small><br>
+          <small style="font-weight:700;color:${t.prior==='Urgente' ? 'var(--danger)' : 'var(--muted)'}">${t.prior}</small><br>
+          <small style="color:var(--muted)">${t.id}</small>
+        </div>
+      `;
+      listaTickets.appendChild(item);
+    });
+  })();
+
+  document.getElementById('btnOpenTicket').addEventListener('click', ()=>{
+    document.getElementById('suMsg').focus();
+    const el = document.getElementById('ticketPanel');
+    el.animate([{boxShadow:'0 0 0 rgba(0,0,0,0)'},{boxShadow:'0 0 30px rgba(0,123,255,0.2)'}], {duration:420, easing:'ease-out'});
+  });
+</script>
+
+</body>
+</html>
